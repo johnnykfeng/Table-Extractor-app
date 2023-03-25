@@ -12,8 +12,8 @@ st.title("Table Extractor App :bookmark_tabs:")
 
 # set up widgets to initialize settings for the table extractor
 col1, col2, col3 = st.columns((1,1,1))
-td_slider = col1.slider('Table Detection threshold', 0.0, 1.0, 0.5)
-tsr_slider = col2.slider('Table Structure Recognition threshold', 0.0, 1.0, 0.5)
+td_slider = col1.slider('Table Detection (TD) threshold', 0.0, 1.0, 0.5)
+tsr_slider = col2.slider('Table Structure Recognition (TSR) threshold', 0.0, 1.0, 0.5)
 crop_padding = col3.slider('Crop padding', 0, 40, 20)
 # ocr_choice = st.radio('Two different OCR can be used: Google is more accurate, Tesseract is faster.', 
 #                       ('Google-OCR', 'Tesseract'))
@@ -21,6 +21,16 @@ ocr_choice = 'Google-OCR'  # pytesseract doesn't work in Docker
 
 # image uploader
 img_name = st.file_uploader("Upload an image with table(s):")
+
+
+if img_name is None:
+    with st.container():
+        sample_file = st.selectbox('Pre-loaded Samples:',
+                                ('table3x3.jpg', 'hard_to_detect_tables.jpg','no_tables.jpg','salary_table.jpg', 
+                                'three_tables.jpg', 'two_borderless_tables.jpg'))
+
+        img_name = r'./samples/'+sample_file
+
 
 # instantiate table extractor
 te = TableExtractor()
@@ -40,7 +50,6 @@ if img_name is not None:
         if True:
             st.caption('running table extraction :hourglass:...')
             status_text = st.empty()
-            # progress_bar = st.progress(0)
             
             df_list, TD_plot, TSR_plots = te.run_extraction(img_name, cell_img_dir = cell_img_dir, 
                                         TD_THRESHOLD=td_slider, 
