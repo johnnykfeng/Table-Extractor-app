@@ -1,0 +1,6 @@
+venvTE
+venvTE/Lib\site-packages/
+__pycache__/
+.vscode/
+cell_images/
+csv_files
