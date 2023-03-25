@@ -329,30 +329,32 @@ class TableExtractor():
         return df.to_csv(save_dir, index=False)
 
     # def create_dataframe(self, c3, cells_pytess_result:list, max_cols:int, max_rows:int):
-    def create_dataframe(self, ocr_text_list:list, max_cols:int, max_rows:int, first_row_header=False):
+    def create_dataframe(self, ocr_text_list:list, max_rows:int, max_cols:int, first_row_header=False):
         '''Create dataframe using list of cell values of the table, also checks for valid header of dataframe
         Args:
-            cells_pytess_result: list of strings or coroutines, each element representing a cell in a table
-            max_cols, max_rows: number of columns and rows
+            ocr_text_list (list of str): list of strings or coroutines, each element representing a cell in a table
+            max_cols (int), max_rows (int): number of columns and rows
+            first_row_header (bool): toggle first row header
         Returns:
             dataframe : final dataframe after all pre-processing 
         '''
+        # print('text_list: ', ocr_text_list.shape)
         if first_row_header: # use first row as header
             headers = ocr_text_list[:max_cols] 
             print('HEADERS = {}'.format(headers))
             new_headers = uniquify(headers, (f' {x!s}' for x in string.ascii_lowercase))
             df = pd.DataFrame("", index=range(0, max_rows), columns=new_headers)
+            
         else: # use numbers as header
-            num_cols = len(ocr_text_list[:max_cols])
-            df = pd.DataFrame("", index=range(0, max_rows), columns=list(range(num_cols)))
+            df = pd.DataFrame("", index=range(0, max_rows), columns=list(range(max_cols)))
             # df = pd.DataFrame("", index=range(0, max_rows))
         
-        cells_list = ocr_text_list[max_cols:]
         cell_idx = 0
         for nrows in range(max_rows):
             for ncols in range(max_cols):
                 # df.iat to access single cell values in a dataframe
-                df.iat[nrows, ncols] = str(cells_list[cell_idx]) 
+                # df.iat[nrows, ncols] = str(cells_list[cell_idx]) 
+                df.iat[nrows, ncols] = str(ocr_text_list[cell_idx]) 
                 cell_idx += 1
         
         return df
@@ -469,7 +471,7 @@ class TableExtractor():
                     j+=1        
                     
                 # google_ocr_texts = await asyncio.gather(*google_ocr_coroutines)                        
-                table_df = self.create_dataframe(google_ocr_texts, max_cols, max_rows, first_row_header=first_row_header) # create dataframe
+                table_df = self.create_dataframe(google_ocr_texts,  len(rows), len(cols), first_row_header=first_row_header) # create dataframe
                 # table_df = self.clean_dataframe(table_df)
                 print("-- Google OCR Results --")
                 print(table_df)
@@ -494,7 +496,7 @@ class TableExtractor():
                         prog_bar.progress(cell_counter/n_cells)     
                     j+=1  
                 
-                table_df = self.create_dataframe(sequential_cell_img_list, max_cols, max_rows, first_row_header=first_row_header)
+                table_df = self.create_dataframe(sequential_cell_img_list, len(rows), len(cols), first_row_header=first_row_header)
                 # table_df = self.clean_dataframe(table_df)
                 print("-- Pytesseract Results --")
                 print(table_df)

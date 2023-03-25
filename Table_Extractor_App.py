@@ -4,6 +4,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 from TableExtraction import *
 import os
+from streamlit_download_button import download_button, file_selector
+
+
+
+# with main_tab:
 
 st.set_option('deprecation.showPyplotGlobalUse', False)
 # st.set_page_config(layout='wide')
@@ -14,7 +19,7 @@ st.title("Table Extractor App :bookmark_tabs:")
 col1, col2, col3 = st.columns((1,1,1))
 td_slider = col1.slider('Table Detection (TD) threshold', 0.0, 1.0, 0.5)
 tsr_slider = col2.slider('Table Structure Recognition (TSR) threshold', 0.0, 1.0, 0.5)
-crop_padding = col3.slider('Crop padding', 0, 40, 20)
+crop_padding = col3.slider('Crop padding', 0, 60, 30)
 # ocr_choice = st.radio('Two different OCR can be used: Google is more accurate, Tesseract is faster.', 
 #                       ('Google-OCR', 'Tesseract'))
 ocr_choice = 'Google-OCR'  # pytesseract doesn't work in Docker
@@ -40,6 +45,9 @@ te = TableExtractor()
 # def convert_df(df):
 #     # IMPORTANT: Cache the conversion to prevent computation on every rerun
 #     return df.to_csv().encode('utf-8')
+
+
+
 
 cell_img_dir = r"./cell_images" # directory for storing cropped cells
 if img_name is not None:
@@ -79,7 +87,6 @@ if img_name is not None:
                 for f in os.listdir(csv_dir):  # removes all existing files in the folder
                     os.remove(os.path.join(csv_dir, f))
                     
-                # print('Number of tables in image: {}'.format(len(df_list)))
                 st.subheader(':arrow_left: Download csv files in the next page')
                 
                 with st.expander('Show extracted dataframes:', expanded=True): 
@@ -87,12 +94,9 @@ if img_name is not None:
                         st.subheader('Extracted Table #{}'.format(i+1))
                         st.dataframe(df) 
                         df.to_csv(f'./csv_files/datafile{i+1}.csv')
-                                    
+                        
+                # st.subheader('**Download csv files** :arrow_down:')
+                                                
         # except:
         #     st.error('**No tables detected!**')
-    
-    
-
-            
-
-            
+           
