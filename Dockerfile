@@ -12,7 +12,6 @@ COPY streamlit_download_button.py /app/
 COPY Table_Extractor_App.py /app/
 COPY TableExtraction.py /app/
 
-
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \

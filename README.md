@@ -41,13 +41,14 @@ List the ready features here:
 - Google Cloud Vision for providing the powerful OCR https://cloud.google.com/vision
 
 ## References
-[1] ["PubTables-1M: Towards comprehensive table extraction from unstructured documents"](https://openaccess.thecvf.com/content/CVPR2022/html/Smock_PubTables-1M_Towards_Comprehensive_Table_Extraction_From_Unstructured_Documents_CVPR_2022_paper.html).
-[2] ["GriTS: Grid table similarity metric for table structure recognition"](https://arxiv.org/abs/2203.12555)
+[1] ["PubTables-1M: Towards comprehensive table extraction from unstructured documents"](https://openaccess.thecvf.com/content/CVPR2022/html/Smock_PubTables-1M_Towards_Comprehensive_Table_Extraction_From_Unstructured_Documents_CVPR_2022_paper.html). <br>
+[2] ["GriTS: Grid table similarity metric for table structure recognition"](https://arxiv.org/abs/2203.12555) <br>
 [3] ["Aligning benchmark datasets for table structure recognition"](https://arxiv.org/abs/2303.00716)
 
 ## Contact
 Created by John Feng. <br>
-Feel free to contact me at johnfengphd@gmail.com.
+Feel free to contact me at johnfengphd@gmail.com. <br>
+My website [https://johnnykfeng.github.io/](https://johnnykfeng.github.io/)
 
 
 <!-- Optional -->
@@ -55,5 +56,3 @@ Feel free to contact me at johnfengphd@gmail.com.
 <!-- This project is open source and available under the [... License](). -->
 
 <!-- You don't have to include all sections - just the one's relevant to your project -->
-
-[def]: #contact
