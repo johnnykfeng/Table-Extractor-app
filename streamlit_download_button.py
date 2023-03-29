@@ -63,15 +63,15 @@ def download_button(object_to_download, download_filename, button_text, pickle_i
     custom_css = f""" 
         <style>
             #{button_id} {{
-                background-color: rgb(255, 100, 100);
-                color: rgb(38, 39, 100);
+                background-color: rgb(255, 255, 255);
+                color: rgb(38, 39, 255);
                 padding: 0.25em 0.38em;
                 position: relative;
                 text-decoration: none;
                 border-radius: 4px;
                 border-width: 1px;
                 border-style: solid;
-                border-color: rgb(230, 234, 241);
+                border-color: rgb(150, 150, 200);
                 border-image: initial;
 
             }} 
@@ -86,7 +86,7 @@ def download_button(object_to_download, download_filename, button_text, pickle_i
                 }}
         </style> """
 
-    dl_link = custom_css + f'<a download="{download_filename}" id="{button_id}" href="data:file/txt;base64,{b64}">{button_text}</a><br></br>'
+    dl_link = custom_css + f'<a download="{download_filename}" id="{button_id}">{button_text}</a><br></br>'
     return dl_link
 
 

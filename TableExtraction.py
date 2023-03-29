@@ -343,19 +343,27 @@ class TableExtractor():
             headers = ocr_text_list[:max_cols] 
             print('HEADERS = {}'.format(headers))
             new_headers = uniquify(headers, (f' {x!s}' for x in string.ascii_lowercase))
-            df = pd.DataFrame("", index=range(0, max_rows), columns=new_headers)
+            df = pd.DataFrame("", index=range(0, max_rows-1), columns=new_headers)
+            
+            cell_idx = max_cols # skip the first row
+            for nrows in range(max_rows-1): 
+                for ncols in range(max_cols):
+                    # df.iat to access single cell values in a dataframe
+                    # df.iat[nrows, ncols] = str(cells_list[cell_idx]) 
+                    df.iat[nrows, ncols] = str(ocr_text_list[cell_idx]) 
+                    cell_idx += 1
             
         else: # use numbers as header
             df = pd.DataFrame("", index=range(0, max_rows), columns=list(range(max_cols)))
             # df = pd.DataFrame("", index=range(0, max_rows))
         
-        cell_idx = 0
-        for nrows in range(max_rows):
-            for ncols in range(max_cols):
-                # df.iat to access single cell values in a dataframe
-                # df.iat[nrows, ncols] = str(cells_list[cell_idx]) 
-                df.iat[nrows, ncols] = str(ocr_text_list[cell_idx]) 
-                cell_idx += 1
+            cell_idx = 0
+            for nrows in range(max_rows):
+                for ncols in range(max_cols):
+                    # df.iat to access single cell values in a dataframe
+                    # df.iat[nrows, ncols] = str(cells_list[cell_idx]) 
+                    df.iat[nrows, ncols] = str(ocr_text_list[cell_idx]) 
+                    cell_idx += 1
         
         return df
 

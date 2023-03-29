@@ -24,6 +24,8 @@ crop_padding = col3.slider('Crop padding', 0, 60, 30)
 #                       ('Google-OCR', 'Tesseract'))
 ocr_choice = 'Google-OCR'  # pytesseract doesn't work in Docker
 
+# print(first_row_header_check)
+
 # image uploader
 img_name = st.file_uploader("Upload an image with table(s):")
 
@@ -46,8 +48,7 @@ te = TableExtractor()
 #     # IMPORTANT: Cache the conversion to prevent computation on every rerun
 #     return df.to_csv().encode('utf-8')
 
-
-
+first_row_header_check = st.checkbox("First row header", value=False)
 
 cell_img_dir = r"./cell_images" # directory for storing cropped cells
 if img_name is not None:
@@ -65,6 +66,7 @@ if img_name is not None:
                                         ocr_choice=ocr_choice,
                                         print_progress=False, 
                                         show_plots=False, 
+                                        first_row_header=first_row_header_check,
                                         delta_xmin=crop_padding, delta_ymin=crop_padding, delta_xmax=crop_padding, delta_ymax=crop_padding,
                                         status_text=status_text)
             
