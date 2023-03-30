@@ -20,9 +20,9 @@ col1, col2, col3 = st.columns((1,1,1))
 td_slider = col1.slider('Table Detection (TD) threshold', 0.0, 1.0, 0.5)
 tsr_slider = col2.slider('Table Structure Recognition (TSR) threshold', 0.0, 1.0, 0.5)
 crop_padding = col3.slider('Crop padding', 0, 60, 30)
-# ocr_choice = st.radio('Two different OCR can be used: Google is more accurate, Tesseract is faster.', 
-#                       ('Google-OCR', 'Tesseract'))
-ocr_choice = 'Google-OCR'  # pytesseract doesn't work in Docker
+ocr_choice = st.radio('Two different OCR can be used: Google is more accurate, Tesseract is faster.', 
+                      ('Google-OCR', 'Tesseract'))
+# ocr_choice = 'Google-OCR'  # pytesseract doesn't work in Docker
 
 # print(first_row_header_check)
 
