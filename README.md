@@ -1,6 +1,4 @@
 # README.md
-Report of this project is originally posted in 
-[Medium](https://johnfengphd.medium.com/table-extraction-with-pre-trained-ml-model-f638dfd4bdb7). <!-- If you have the project hosted somewhere, include the link here. -->
 
 <!-- ![Example screenshot](header_te.png) -->
 
