@@ -4,5 +4,6 @@ __pycache__/
 .vscode/
 cell_images/
 csv_files
+Dockerfile
+header_te.png
 *.json
-

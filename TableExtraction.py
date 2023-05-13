@@ -20,7 +20,8 @@ from pytesseract import Output
 from transformers import (DetrFeatureExtractor,
                           TableTransformerForObjectDetection)
 
-CREDENTIALS =  r'./premium-odyssey-378518-934cec99d0b6.json'
+# CREDENTIALS =  r'./premium-odyssey-378518-934cec99d0b6.json'
+CREDENTIALS =  r'./voltaic-plating-386623-1a62ec800ca7.json'
 
 def google_ocr_image_to_text(file_path, CREDENTIALS):
     ''' Function that takes in an image file and returns the ocr text.
@@ -48,7 +49,7 @@ def google_ocr_image_to_text(file_path, CREDENTIALS):
 
 # I have to install Tesseract-OCR in Windows and designate the path
 # installation file is found here https://github.com/UB-Mannheim/tesseract/wiki
-# pytesseract.pytesseract.tesseract_cmd = r'C:\Users\Feng\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = r'C:\Users\Feng\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
 
 def pytess(cell_pil_img):
     return ' '.join(pytesseract.image_to_data(cell_pil_img, output_type=Output.DICT, config='-c tessedit_char_blacklist=œ˜â€œï¬â™Ã©œ¢!|”?«“¥ --psm 6 preserve_interword_spaces')['text']).strip()
