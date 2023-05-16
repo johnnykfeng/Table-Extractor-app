@@ -4,7 +4,7 @@
 
 <!-- ![Example screenshot](header_te.png) -->
 Report of this project can be found here &rarr; [report](https://johnnykfeng.github.io/Table-extraction/) 
-
+[Video Demo](https://www.loom.com/share/972141aade75425b97fd547f3c65e91b)
 
 ## How-to-use
 There are 3 sliders to adjust the parameters inside the ML model. For the most of the time the default settings don't need to be changed. If adjustments to the model must be made, here are some guidelines.

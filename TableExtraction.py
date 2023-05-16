@@ -21,9 +21,9 @@ from transformers import (DetrFeatureExtractor,
                           TableTransformerForObjectDetection)
 
 # CREDENTIALS =  r'./premium-odyssey-378518-934cec99d0b6.json'
-CREDENTIALS =  r'./voltaic-plating-386623-1a62ec800ca7.json'
+# CREDENTIALS =  r'./voltaic-plating-386623-1a62ec800ca7.json'
 
-def google_ocr_image_to_text(file_path, CREDENTIALS):
+def google_ocr_image_to_text(file_path, api_key_string, quota_project_id, CREDENTIALS=None):
     ''' Function that takes in an image file and returns the ocr text.
     Used in the last step of table extraction, on each of the cropped
     cell images. The cell images should be saved in a directory than input
@@ -33,8 +33,10 @@ def google_ocr_image_to_text(file_path, CREDENTIALS):
         file_path: path for cell_images
         CREDENTIALS: sign up for google cloud platform and use your own
     '''
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = CREDENTIALS
-    client = vision.ImageAnnotatorClient()
+    
+    # os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = CREDENTIALS
+    client = vision.ImageAnnotatorClient(client_options={"api_key": api_key_string,
+                                                        "quota_project_id": quota_project_id})
     
     with io.open(file_path, 'rb') as image_file:
         content = image_file.read()
@@ -369,8 +371,9 @@ class TableExtractor():
         return df
 
     # Runs the complete table extraction process of generating pandas dataframes from raw pdf-page images
-    def run_extraction(self, image_path:str, cell_img_dir:str, TD_THRESHOLD=0.6, TSR_THRESHOLD=0.8, 
-                       ocr_choice='Google-OCR', print_progress=False, first_row_header=False, autosavecsv = False,
+    def run_extraction(self, image_path:str, cell_img_dir:str, api_key_string:str, quota_project_id:str,
+                       TD_THRESHOLD=0.6, TSR_THRESHOLD=0.8, 
+                       ocr_choice='Google-OCR',  print_progress=False, first_row_header=False, autosavecsv = False,
                        show_plots = True, tsr_fontsize=10,
                         delta_xmin=20, delta_ymin=20, delta_xmax=20, delta_ymax=20 , 
                         status_text=None, progress_bar=None):
@@ -475,8 +478,10 @@ class TableExtractor():
                         img.save(cell_img_dir + cell_name)
                         
                         # apply google ocr to the newly created cell image
-                        google_ocr_texts.append(google_ocr_image_to_text(cell_img_dir + cell_name, CREDENTIALS))
-                        # text_google_ocr = google_ocr_image_to_text(cell_img_dir + cell_name, CREDENTIALS)
+                        google_ocr_texts.append(google_ocr_image_to_text(cell_img_dir + cell_name, 
+                                                                         api_key_string = api_key_string, 
+                                                                         quota_project_id = quota_project_id))
+                        # text_google_ocr = google_ocr_image_to_text(cell_img_dir + cell_name, google_api_credentials)
                     j+=1        
                     
                 # google_ocr_texts = await asyncio.gather(*google_ocr_coroutines)                        
@@ -528,14 +533,9 @@ class TableExtractor():
         
 if __name__ == "__main__":
     
-    cell_img_dir = r"C:\Users\Feng\Coding projects\sigtica-table-extraction\cell_images"
-    
-    data_tables_dir = r"D:\_data_table_images"
-    # file_name = '\\0190010c-46.jpg'
-    file_name = '\\0806809c-21.jpg' 
-    # image_path = data_tables_dir + file_name
-    image_path = r'C:\Users\Feng\Coding projects\sagtica-table-extraction\table3x3.jpg'
-    # image_path = r'no_table.jpg'
+    cell_img_dir = r".\cell_images"
+    # data_tables_dir = r"D:\_data_table_images"
+    image_path = r'.\samples\table3x3.jpg'
     print('-- image_path --')
     print(image_path)
     

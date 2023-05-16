@@ -7,9 +7,6 @@ import os
 from streamlit_download_button import download_button, file_selector
 
 
-
-# with main_tab:
-
 st.set_option('deprecation.showPyplotGlobalUse', False)
 # st.set_page_config(layout='wide')
 
@@ -22,13 +19,20 @@ tsr_slider = col2.slider('Table Structure Recognition (TSR) threshold', 0.0, 1.0
 crop_padding = col3.slider('Crop padding', 0, 60, 30)
 ocr_choice = st.radio('Two different OCR can be used: Google is more accurate, Tesseract is faster.', 
                       ('Google-OCR', 'Tesseract'))
+
+
+
+# if ocr_choice == 'Google-OCR':
+#     api_key = st.text_input('Enter Google API key:')
+# else:
+#     api_key = None
+
 # ocr_choice = 'Google-OCR'  # pytesseract doesn't work in Docker
 
 # print(first_row_header_check)
 
 # image uploader
 img_name = st.file_uploader("Upload an image with table(s):")
-
 
 if img_name is None:
     with st.container():
@@ -48,6 +52,10 @@ te = TableExtractor()
 #     # IMPORTANT: Cache the conversion to prevent computation on every rerun
 #     return df.to_csv().encode('utf-8')
 
+# secret api key for google ocr
+api_key = st.secrets["api_key"]
+quota_project_id = st.secrets["quota_project_id"]
+
 first_row_header_check = st.checkbox("First row header", value=False)
 
 cell_img_dir = r"./cell_images" # directory for storing cropped cells
@@ -64,6 +72,8 @@ if img_name is not None:
                                         TD_THRESHOLD=td_slider, 
                                         TSR_THRESHOLD=tsr_slider,
                                         ocr_choice=ocr_choice,
+                                        api_key_string=api_key,
+                                        quota_project_id=quota_project_id,
                                         print_progress=False, 
                                         show_plots=False, 
                                         first_row_header=first_row_header_check,
