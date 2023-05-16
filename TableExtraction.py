@@ -20,9 +20,6 @@ from pytesseract import Output
 from transformers import (DetrFeatureExtractor,
                           TableTransformerForObjectDetection)
 
-# CREDENTIALS =  r'./premium-odyssey-378518-934cec99d0b6.json'
-# CREDENTIALS =  r'./voltaic-plating-386623-1a62ec800ca7.json'
-
 def google_ocr_image_to_text(file_path, api_key_string, quota_project_id, CREDENTIALS=None):
     ''' Function that takes in an image file and returns the ocr text.
     Used in the last step of table extraction, on each of the cropped
@@ -34,7 +31,6 @@ def google_ocr_image_to_text(file_path, api_key_string, quota_project_id, CREDEN
         CREDENTIALS: sign up for google cloud platform and use your own
     '''
     
-    # os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = CREDENTIALS
     client = vision.ImageAnnotatorClient(client_options={"api_key": api_key_string,
                                                         "quota_project_id": quota_project_id})
     
