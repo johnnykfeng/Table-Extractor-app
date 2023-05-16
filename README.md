@@ -1,6 +1,10 @@
 # README.md
+<!--Report of this project is originally posted in 
+[Medium](https://johnfengphd.medium.com/table-extraction-with-pre-trained-ml-model-f638dfd4bdb7).  If you have the project hosted somewhere, include the link here. -->
 
 <!-- ![Example screenshot](header_te.png) -->
+Report of this project can be found here &rarr; [report](https://johnnykfeng.github.io/Table-extraction/) 
+[Video Demo](https://www.loom.com/share/972141aade75425b97fd547f3c65e91b)
 
 ## How-to-use
 There are 3 sliders to adjust the parameters inside the ML model. For the most of the time the default settings don't need to be changed. If adjustments to the model must be made, here are some guidelines.
@@ -24,6 +28,7 @@ A very accurate model has been developed by a team at Microsoft [1]. They traine
 ## Project Status
 `2023-03-07` - Python script version published on [github](https://github.com/johnnykfeng/sigtica-table-extraction) <br>
 `2023-03-25` - A streamlit app has been built around this work. The first prototype of app has been deployed.
+`2023-05-01` - My Google API has been restricted
 
 ## Future developments:
 - Develop multiple table extraction capabilities through parallel processes
