@@ -4,3 +4,5 @@ __pycache__/
 .vscode/
 cell_images/
 csv_files
+*.json
+
