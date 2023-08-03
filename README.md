@@ -28,7 +28,6 @@ Table extraction from documents using machine learning involves training algorit
 A very accurate model has been developed by a team at Microsoft [1]. They trained their DETR (End-to-end Object Detection with Transformers) -based model on a very large dataset of approximately 1 million annotated tables. The original tables were scraped from the PubMed Central Open Access (PMCAO) database. The Microsoft team also formulated their own scoring criteria, Grid Table Similarity (GriTS), for assessing the accuracy of their model [2].
 
 ## Project Status
-`2023-03-07` - Python script version published on [github](https://github.com/johnnykfeng/sigtica-table-extraction) <br>
 `2023-03-25` - A streamlit app has been built around this work. The first prototype of app has been deployed. <br>
 `2023-05-01` - My Google API has been restricted, app is down <br> 
 `2023-05-15` - Fixed the problem, re-deployed app with new URL  <br>
