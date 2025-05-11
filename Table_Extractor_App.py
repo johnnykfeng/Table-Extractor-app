@@ -20,17 +20,6 @@ crop_padding = col3.slider('Crop padding', 0, 60, 30)
 ocr_choice = st.radio('Two different OCR can be used: Google is more accurate, Tesseract is faster.', 
                       ('Google-OCR', 'Tesseract'))
 
-
-
-# if ocr_choice == 'Google-OCR':
-#     api_key = st.text_input('Enter Google API key:')
-# else:
-#     api_key = None
-
-# ocr_choice = 'Google-OCR'  # pytesseract doesn't work in Docker
-
-# print(first_row_header_check)
-
 # image uploader
 img_name = st.file_uploader("Upload an image with table(s):")
 
@@ -42,15 +31,8 @@ if img_name is None:
 
         img_name = r'./samples/'+sample_file
 
-
 # instantiate table extractor
 te = TableExtractor()
-
-# I ended up not using this
-# @st.cache_data
-# def convert_df(df):
-#     # IMPORTANT: Cache the conversion to prevent computation on every rerun
-#     return df.to_csv().encode('utf-8')
 
 # secret api key for google ocr
 api_key = st.secrets["api_key"]

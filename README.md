@@ -3,8 +3,10 @@
 [Medium](https://johnfengphd.medium.com/table-extraction-with-pre-trained-ml-model-f638dfd4bdb7).  If you have the project hosted somewhere, include the link here. -->
 
 <!-- ![Example screenshot](header_te.png) -->
-Report of this project can be found here &rarr; [report](https://johnnykfeng.github.io/Table-extraction/) 
-[Video Demo](https://www.loom.com/share/972141aade75425b97fd547f3c65e91b)
+Current URL for app &rarr; https://table-extractor-johnnykfeng.streamlit.app/ <br>
+Report of this project can be found here &rarr; https://johnnykfeng.github.io/Table-extraction/ <br>
+Public Github repo &rarr; https://github.com/johnnykfeng/Table-Extractor-app <br>
+Video Demo &rarr; [Loom](https://www.loom.com/share/972141aade75425b97fd547f3c65e91b)
 
 ## How-to-use
 There are 3 sliders to adjust the parameters inside the ML model. For the most of the time the default settings don't need to be changed. If adjustments to the model must be made, here are some guidelines.
@@ -26,9 +28,9 @@ Table extraction from documents using machine learning involves training algorit
 A very accurate model has been developed by a team at Microsoft [1]. They trained their DETR (End-to-end Object Detection with Transformers) -based model on a very large dataset of approximately 1 million annotated tables. The original tables were scraped from the PubMed Central Open Access (PMCAO) database. The Microsoft team also formulated their own scoring criteria, Grid Table Similarity (GriTS), for assessing the accuracy of their model [2].
 
 ## Project Status
-`2023-03-07` - Python script version published on [github](https://github.com/johnnykfeng/sigtica-table-extraction) <br>
-`2023-03-25` - A streamlit app has been built around this work. The first prototype of app has been deployed.
-`2023-05-01` - My Google API has been restricted
+`2023-03-25` - A streamlit app has been built around this work. The first prototype of app has been deployed. <br>
+`2023-05-01` - My Google API has been restricted, app is down <br> 
+`2023-05-15` - Fixed the problem, re-deployed app with new URL  <br>
 
 ## Future developments:
 - Develop multiple table extraction capabilities through parallel processes
