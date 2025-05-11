@@ -1,12 +1,5 @@
-import io
-import os
-import string
-from collections import Counter
-from itertools import count, tee
-# import asyncio
-from time import time
 import streamlit as st
-
+import pandas as pd 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -31,6 +24,7 @@ def google_ocr_image_to_text(file_path, api_key_string, quota_project_id, CREDEN
         CREDENTIALS: sign up for google cloud platform and use your own
     '''
     
+    # os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = CREDENTIALS
     client = vision.ImageAnnotatorClient(client_options={"api_key": api_key_string,
                                                         "quota_project_id": quota_project_id})
     
@@ -47,7 +41,7 @@ def google_ocr_image_to_text(file_path, api_key_string, quota_project_id, CREDEN
 
 # I have to install Tesseract-OCR in Windows and designate the path
 # installation file is found here https://github.com/UB-Mannheim/tesseract/wiki
-pytesseract.pytesseract.tesseract_cmd = r'C:\Users\Feng\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
+# pytesseract.pytesseract.tesseract_cmd = r'C:\Users\Feng\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
 
 def pytess(cell_pil_img):
     return ' '.join(pytesseract.image_to_data(cell_pil_img, output_type=Output.DICT, config='-c tessedit_char_blacklist=œ˜â€œï¬â™Ã©œ¢!|”?«“¥ --psm 6 preserve_interword_spaces')['text']).strip()
@@ -344,13 +338,17 @@ class TableExtractor():
             new_headers = uniquify(headers, (f' {x!s}' for x in string.ascii_lowercase))
             df = pd.DataFrame("", index=range(0, max_rows-1), columns=new_headers)
             
-            cell_idx = max_cols # skip the first row
-            for nrows in range(max_rows-1): 
-                for ncols in range(max_cols):
-                    # df.iat to access single cell values in a dataframe
-                    # df.iat[nrows, ncols] = str(cells_list[cell_idx]) 
-                    df.iat[nrows, ncols] = str(ocr_text_list[cell_idx]) 
-                    cell_idx += 1
+            df_list, TD_plot, TSR_plots = te.run_extraction(img_name, cell_img_dir = cell_img_dir, 
+                                        TD_THRESHOLD=td_slider, 
+                                        TSR_THRESHOLD=tsr_slider,
+                                        ocr_choice=ocr_choice,
+                                        api_key_string=api_key,
+                                        quota_project_id=quota_project_id,
+                                        print_progress=False, 
+                                        show_plots=False, 
+                                        first_row_header=first_row_header_check,
+                                        delta_xmin=crop_padding, delta_ymin=crop_padding, delta_xmax=crop_padding, delta_ymax=crop_padding,
+                                        status_text=status_text)
             
         else: # use numbers as header
             df = pd.DataFrame("", index=range(0, max_rows), columns=list(range(max_cols)))
@@ -367,9 +365,8 @@ class TableExtractor():
         return df
 
     # Runs the complete table extraction process of generating pandas dataframes from raw pdf-page images
-    def run_extraction(self, image_path:str, cell_img_dir:str, api_key_string:str, quota_project_id:str,
-                       TD_THRESHOLD=0.6, TSR_THRESHOLD=0.8, 
-                       ocr_choice='Google-OCR',  print_progress=False, first_row_header=False, autosavecsv = False,
+    def run_extraction(self, image_path:str, cell_img_dir:str, TD_THRESHOLD=0.6, TSR_THRESHOLD=0.8, 
+                       ocr_choice='Google-OCR', print_progress=False, first_row_header=False, autosavecsv = False,
                        show_plots = True, tsr_fontsize=10,
                         delta_xmin=20, delta_ymin=20, delta_xmax=20, delta_ymax=20 , 
                         status_text=None, progress_bar=None):
@@ -474,37 +471,11 @@ class TableExtractor():
                         img.save(cell_img_dir + cell_name)
                         
                         # apply google ocr to the newly created cell image
-                        google_ocr_texts.append(google_ocr_image_to_text(cell_img_dir + cell_name, 
-                                                                         api_key_string = api_key_string, 
-                                                                         quota_project_id = quota_project_id))
-                        # text_google_ocr = google_ocr_image_to_text(cell_img_dir + cell_name, google_api_credentials)
+                        google_ocr_texts.append(google_ocr_image_to_text(cell_img_dir + cell_name, CREDENTIALS))
+                        # text_google_ocr = google_ocr_image_to_text(cell_img_dir + cell_name, CREDENTIALS)
                     j+=1        
                     
-                # google_ocr_texts = await asyncio.gather(*google_ocr_coroutines)                        
-                table_df = self.create_dataframe(google_ocr_texts,  len(rows), len(cols), first_row_header=first_row_header) # create dataframe
-                # table_df = self.clean_dataframe(table_df)
-                print("-- Google OCR Results --")
-                print(table_df)
-                if autosavecsv:
-                    self.save_df_to_csv(table_df, 'table_df.csv')  
-                print('Google OCR process took {:.2f} seconds'.format(time()-start)) 
-                st.text('Processing time: {:.2f} seconds'.format(time()-start))
-                 
-            #-------------------------------------------------------------------------            
-            if ocr_choice=='Tesseract':
-                sequential_cell_img_list = [] # this is for pytess
-                print('Start PyTesseract OCR process...')
-                start = time()
-                j=0
-                cell_counter=0
-                prog_bar = st.progress(0)
-                for k, img_list in cells_img.items():
-                    for i, img in enumerate(img_list):
-                        sequential_cell_img_list.append(pytess(img))
-                        cell_counter += 1
-                        # progress_bar.progress(cell_counter/n_cells)
-                        prog_bar.progress(cell_counter/n_cells)     
-                    j+=1  
+                st.subheader(':arrow_left: Download csv files in the next page')
                 
                 table_df = self.create_dataframe(sequential_cell_img_list, len(rows), len(cols), first_row_header=first_row_header)
                 # table_df = self.clean_dataframe(table_df)
@@ -529,9 +500,14 @@ class TableExtractor():
         
 if __name__ == "__main__":
     
-    cell_img_dir = r".\cell_images"
-    # data_tables_dir = r"D:\_data_table_images"
-    image_path = r'.\samples\table3x3.jpg'
+    cell_img_dir = r"C:\Users\Feng\Coding projects\sigtica-table-extraction\cell_images"
+    
+    data_tables_dir = r"D:\_data_table_images"
+    # file_name = '\\0190010c-46.jpg'
+    file_name = '\\0806809c-21.jpg' 
+    # image_path = data_tables_dir + file_name
+    image_path = r'C:\Users\Feng\Coding projects\sagtica-table-extraction\table3x3.jpg'
+    # image_path = r'no_table.jpg'
     print('-- image_path --')
     print(image_path)
     
