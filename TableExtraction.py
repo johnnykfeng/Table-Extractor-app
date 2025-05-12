@@ -13,7 +13,7 @@ from pytesseract import Output
 from transformers import (DetrFeatureExtractor,
                           TableTransformerForObjectDetection)
 
-def google_ocr_image_to_text(file_path, api_key_string, quota_project_id, CREDENTIALS=None):
+def google_ocr_image_to_text(file_path, CREDENTIALS=None):
     ''' Function that takes in an image file and returns the ocr text.
     Used in the last step of table extraction, on each of the cropped
     cell images. The cell images should be saved in a directory than input
@@ -24,9 +24,9 @@ def google_ocr_image_to_text(file_path, api_key_string, quota_project_id, CREDEN
         CREDENTIALS: sign up for google cloud platform and use your own
     '''
     
-    # os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = CREDENTIALS
-    client = vision.ImageAnnotatorClient(client_options={"api_key": api_key_string,
-                                                        "quota_project_id": quota_project_id})
+    service_account_info = st.secrets["GOOGLE_APPLICATION_CREDENTIALS"]
+    credentials = service_account.Credentials.from_service_account_info(service_account_info)
+    client = vision.ImageAnnotatorClient(credentials=credentials)
     
     with io.open(file_path, 'rb') as image_file:
         content = image_file.read()
