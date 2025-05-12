@@ -6,3 +6,5 @@ cell_images/
 csv_files
 *.json
 
+secrets.toml
+.streamlit/secrets.toml
